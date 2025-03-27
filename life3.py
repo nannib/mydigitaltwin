@@ -408,6 +408,9 @@ def run_pipeline(text_prompt, voice_input, history):
             config = json.load(f)
         
         # Gestione input vocale
+		# Gestione input testuale
+        if text_prompt:
+            new_history.append(("👤", text_prompt))
         if not text_prompt and voice_input:
             text_prompt = transcribe_audio(voice_input)
             new_history.append(("👤", text_prompt))
@@ -421,10 +424,13 @@ def run_pipeline(text_prompt, voice_input, history):
         if not os.path.exists(video_sample):
             return new_history, "File video campione mancante!", None
 
-        # Ricerca contestuale
+        # Costruisci la cronologia della chat
+        chat_history_str = "\n".join([f"{role} {msg}" for role, msg in new_history])
+		# Ricerca contestuale
         context = rag_search(text_prompt, config)
-        full_prompt = f"{config['system_prompt']}\nContesto:\n{context}\nDomanda: {text_prompt}\nRisposta:"
-        
+        # Combina la cronologia della chat con il contesto RAG e il prompt
+        full_prompt = f"{config['system_prompt']}\nContesto:\n{context}\nChat:\n{chat_history_str}\nDomanda: {text_prompt}\nRisposta:"
+
         # Generazione risposta
         response_text = query_ollama(full_prompt)
         new_history.append(("🤖", response_text))
