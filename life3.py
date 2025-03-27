@@ -348,7 +348,7 @@ def query_ollama(prompt: str) -> str:
                 "stream": False,
                 "options": {
                     "temperature": config['temperature'],
-                    "num_ctx": 4096
+                    "num_ctx": 8192
                 }
             }
         )
