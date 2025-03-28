@@ -28,6 +28,8 @@ DOCUMENTS_DIR = "documents"
 DIMENSION = 768  # Dimensione embedding 
 OLLAMA_BASE_URL = "http://localhost:11434"
 embedder = "dbmdz/bert-base-italian-uncased" 
+AUDIO_OUTPUT_PATH = "output_audio.wav"
+VIDEO_OUTPUT_PATH = "output_video.mp4"
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
@@ -396,7 +398,7 @@ def transcribe_audio(audio):
     return transcriber({"sampling_rate": sr, "raw": y.flatten()})["text"]
 
 def run_pipeline(text_prompt, voice_input, history):
-    new_history = history or []
+    history = history or []
     
     # Percorsi fissi dei file campione
     voice_sample = "sample_voice.wav"
@@ -410,22 +412,22 @@ def run_pipeline(text_prompt, voice_input, history):
         # Gestione input vocale
 		# Gestione input testuale
         if text_prompt:
-            new_history.append(("👤", text_prompt))
+            history.append(("👤", text_prompt))
         if not text_prompt and voice_input:
             text_prompt = transcribe_audio(voice_input)
-            new_history.append(("👤", text_prompt))
+            history.append(("👤", text_prompt))
         
         if not text_prompt:
-            return new_history, "Nessun prompt fornito.", None
+            return history, "Nessun prompt fornito.", None
 
         # Verifica file campione
         if not os.path.exists(voice_sample):
-            return new_history, "File voce campione mancante!", None
+            return history, "File voce campione mancante!", None
         if not os.path.exists(video_sample):
-            return new_history, "File video campione mancante!", None
+            return history, "File video campione mancante!", None
 
         # Costruisci la cronologia della chat
-        chat_history_str = "\n".join([f"{role} {msg}" for role, msg in new_history])
+        chat_history_str = "\n".join([f"{role} {msg}" for role, msg in history])
 		# Ricerca contestuale
         context = rag_search(text_prompt, config)
         # Combina la cronologia della chat con il contesto RAG e il prompt
@@ -433,16 +435,17 @@ def run_pipeline(text_prompt, voice_input, history):
 
         # Generazione risposta
         response_text = query_ollama(full_prompt)
-        new_history.append(("🤖", response_text))
+		        # Aggiungi risposta alla cronologia PRIMA di restituire
+        history.append(("🤖", response_text))
         
         # Generazione output audio/video
-        output_audio = synthesize_voice(text=response_text,speaker_wav=voice_sample,output_path=f"output_{int(time.time())}.wav")
-        output_video = lip_sync(output_audio, video_sample, f"output_{int(time.time())}.mp4")
+        output_audio = synthesize_voice(text=response_text,speaker_wav=voice_sample,output_path=AUDIO_OUTPUT_PATH)
+        output_video = lip_sync(output_audio, video_sample, VIDEO_OUTPUT_PATH)
         
-        return new_history, "", output_video
+        return history, "", output_video
     
     except Exception as e:
-        return new_history, f"Errore: {str(e)}", None
+        return history, f"Errore: {str(e)}", None
 
 # Interfaccia Gradio
 css = """
@@ -508,6 +511,19 @@ css += """
 }
 """
 
+def cleanup_and_exit():
+    """Pulisce i file e termina il programma"""
+    try:
+        if os.path.exists(AUDIO_OUTPUT_PATH):
+            os.remove(AUDIO_OUTPUT_PATH)
+        if os.path.exists(VIDEO_OUTPUT_PATH):
+            os.remove(VIDEO_OUTPUT_PATH)
+    except Exception as e:
+        print(f"Errore durante la pulizia: {str(e)}")
+    
+    os._exit(0)  # Termina forzatamente il processo
+
+
 with gr.Blocks(css=css, title="AI Assistant") as app:
     gr.HTML("<h1 style='text-align: center'>DigitalTwin con RAG Integrato</h1>")
     gr.HTML(autoplay_js)
@@ -523,6 +539,7 @@ with gr.Blocks(css=css, title="AI Assistant") as app:
             with gr.Row():
                 clear_btn = gr.Button("Pulisci", variant="secondary")
                 submit_btn = gr.Button("Invia", variant="primary")
+                exit_btn = gr.Button("EXIT", variant="stop") 
 
         with gr.Column(scale=2):
             video_output = gr.Video(label="Video Output", autoplay=True, format="mp4")
@@ -591,6 +608,12 @@ with gr.Blocks(css=css, title="AI Assistant") as app:
         lambda: gr.update(value="<div style='text-align: center'>Conversazione resettata...</div>"),
         outputs=chat_history
     )
+    exit_btn.click(
+        cleanup_and_exit,
+        inputs=None,
+        outputs=None,
+        queue=False
+    )
 
 def format_chat_history(history):
     if not history:
@@ -604,5 +627,10 @@ def format_chat_history(history):
     return "<div class='chat-history'>" + "\n".join(html) + "</div>"
 
 if __name__ == "__main__":
+    # Pulisci file residui all'avvio
+    if os.path.exists(AUDIO_OUTPUT_PATH):
+        os.remove(AUDIO_OUTPUT_PATH)
+    if os.path.exists(VIDEO_OUTPUT_PATH):
+        os.remove(VIDEO_OUTPUT_PATH)
     initialize_workspace()
     app.launch()
