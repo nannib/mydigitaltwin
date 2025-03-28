@@ -19,7 +19,7 @@ import faiss
 import pickle
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import pytesseract
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from transformers import AutoTokenizer, AutoModel, BlipProcessor, BlipForConditionalGeneration
 
 # Configurazioni RAG
