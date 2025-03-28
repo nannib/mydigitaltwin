@@ -8,6 +8,6 @@ pypdf==5.4.0
 pytesseract==0.3.13
 Requests==2.32.3
 SpeechRecognition==3.14.1
-torch
+torch==2.5.1+cu124
 transformers==4.46.1
 TTS==0.22.0
