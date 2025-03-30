@@ -2,7 +2,7 @@ faiss_cpu==1.10.0
 gradio==5.23.1
 langchain==0.3.21
 lipsync==0.1.0
-numpy==2.2.4
+numpy
 openai_whisper==20240930
 pypdf==5.4.0
 pytesseract==0.3.13
