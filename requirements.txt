@@ -10,4 +10,4 @@ pytesseract==0.3.13
 Requests==2.32.3
 SpeechRecognition==3.14.1
 transformers==4.46.1
-TTS==0.22.0
+coqui-tts==0.25.3
