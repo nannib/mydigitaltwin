@@ -1,4 +1,6 @@
 torch==2.5.1 --index-url https://download.pytorch.org/whl/cu124
+torchvision==0.20.1 
+torchaudio==2.5.1
 faiss_cpu==1.10.0
 gradio==5.20.0
 langchain==0.3.21
