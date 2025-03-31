@@ -1,9 +1,9 @@
 torch==2.5.1 --index-url https://download.pytorch.org/whl/cu124
 faiss_cpu==1.10.0
-gradio==5.23.1
+gradio==5.20.0
 langchain==0.3.21
 lipsync==0.1.0
-numpy
+numpy==1.26.4
 openai_whisper==20240930
 pypdf==5.4.0
 pytesseract==0.3.13
