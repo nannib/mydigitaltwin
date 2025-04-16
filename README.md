@@ -1,4 +1,4 @@
-# digitaltwin  
+# mydigitaltwin  
 My digital twin, this program can make your digital twin using a video and audio sample of you, then you can interact by microphone or text chatting.  
 You will see yourself speaking with you, with your voice and your face in lip sync.  
 
