@@ -1,6 +1,3 @@
-https://drive.usercontent.google.com/download?id=13Ktexq-nZOsAxqrTdMh3Q0ntPB3yiBtv&export=download&authuser=1&confirm=t&uuid=59476b8f-1c53-49f5-bd66-3e2d69914444&at=AEz70l4eX8vYvrZ2pRyoobNcyXPC%3A1741375975879
-
-https://huggingface.co/spaces/capstonedubtrack/Indiclanguagedubbing/resolve/416598a2eefa2f1b02bea859bda45f18208a53cb/wav2lip_gan.pth
-
 official:
-https://iiitaphyd-my.sharepoint.com/:u:/g/personal/radrabha_m_research_iiit_ac_in/EdjI7bZlgApMqsVoEUUXpLsBxqXbn5z8VTmoxp55YNDcIA?e=n9ljGW
+From https://github.com/Rudrabha/Wav2Lip?tab=readme-ov-file
+https://drive.google.com/file/d/15G3U08c8xsCkOqQxE38Z2XXDnPcOptNk/view?usp=share_link
