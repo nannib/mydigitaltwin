@@ -7,5 +7,8 @@ You will see yourself speaking with you, with your voice and your face in lip sy
 It uses an AI model and a RAG system for custom answers, you could index your life, your thoughts, so you can live forever in a digital life mode.  
 It runs local on your computer, no API, no external servers.  
 
+# ** How to run **  
+python life3.py  
+
 This is the notebook for trying it:  
 https://www.kaggle.com/code/nannib/notebook193e2ba556  
