@@ -20,7 +20,7 @@ moviepy==2.1.2
 opencv_contrib_python==4.11.0.86
 opencv_python==4.11.0.86
 openpyxl==3.1.5
-Pillow==11.2.1
+Pillow
 pydub==0.25.1
 TTS==0.22.0
 python_docx==1.1.2
