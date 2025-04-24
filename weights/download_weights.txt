@@ -1,5 +1,3 @@
-official:
-From https://github.com/Rudrabha/Wav2Lip?tab=readme-ov-file
-https://drive.google.com/file/d/15G3U08c8xsCkOqQxE38Z2XXDnPcOptNk/view?usp=share_link
+https://drive.usercontent.google.com/download?id=13Ktexq-nZOsAxqrTdMh3Q0ntPB3yiBtv&authuser=1
 
-then rename it in wav2lip_gan.pth and put it in this directory.
+then put it in this directory.
