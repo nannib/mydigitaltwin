@@ -21,6 +21,29 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import pytesseract
 from pypdf import PdfReader
 from transformers import AutoTokenizer, AutoModel, BlipProcessor, BlipForConditionalGeneration
+from moviepy import VideoFileClip
+from bs4 import BeautifulSoup
+from PIL import Image
+from datetime import datetime
+import docx
+import openpyxl
+import cv2
+import tempfile
+from requests.exceptions import ConnectionError
+from pydub import AudioSegment
+
+def merge_audio_files(audio_parts, output_path):
+    """Unisce più file audio in uno unico."""
+    try:
+        combined = AudioSegment.empty()
+        for part in audio_parts:
+            combined += AudioSegment.from_wav(part)
+        
+        # Esporta il file audio combinato
+        combined.export(output_path, format="wav")
+        return output_path
+    except Exception as e:
+        raise RuntimeError(f"Errore durante l'unione dei file audio: {str(e)}")
 
 # Configurazioni RAG
 WORKSPACES_DIR = "defaultws"
@@ -30,6 +53,13 @@ OLLAMA_BASE_URL = "http://localhost:11434"
 embedder = "dbmdz/bert-base-italian-uncased" 
 AUDIO_OUTPUT_PATH = "output_audio.wav"
 VIDEO_OUTPUT_PATH = "output_video.mp4"
+
+SUPPORTED_EXT = {
+    'text': ['.pdf', '.docx', '.xlsx', '.txt', '.html'],
+    'image': ['.png', '.jpg', '.jpeg'],
+    'audio': ['.mp3', '.wav', '.m4a'],
+    'video': ['.mp4', '.avi', '.mov']
+}
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
@@ -69,9 +99,10 @@ def initialize_workspace():
         default_config = {
             "model": "",
             "embedder": "dbmdz/bert-base-italian-uncased",
-            "temperature": 0.5,
-            "chunk_size": 512,
-            "top_k": 5,
+            "temperature": 0.2,
+            "chunk_size": 800,
+            "top_k": 6,
+			"chunk_overlap": 128,
             "system_prompt": "Sei un assistente esperto. Rispondi basandoti sul contesto fornito."
         }
         with open(config_path, 'w') as f:
@@ -216,27 +247,109 @@ except Exception as e:
     print(f"Errore caricamento modello BERT: {str(e)}")
     raise
 
+# Funzioni di estrazione testo
+def extract_text_from_video(path):
+    try:
+        temp_audio = f"temp_{datetime.now().timestamp()}.wav"
+        clip = VideoFileClip(path)
+        clip.audio.write_audiofile(temp_audio)
+        text = whisper.load_model('base').transcribe(temp_audio)['text']
+        os.remove(temp_audio)
+        return text
+    except Exception as e:
+        if language=="Italian":
+            st.error(f"Errore elaborazione video: {e}")
+        else:
+            st.error(f"Video processing error: {e}")
+        return ""
+
+def extract_video_frames(path, num_frames=10):
+    cap = cv2.VideoCapture(path)
+    frames = []
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    indices = np.linspace(0, total_frames-1, num=num_frames, dtype=int)
+    
+    for idx in indices:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+        ret, frame = cap.read()
+        if ret:
+            frames.append((idx, frame))
+    cap.release()
+    return frames
+
+def describe_frame(frame):
+    processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+    model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+    pil_image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    inputs = processor(pil_image, return_tensors="pt")
+    outputs = model.generate(**inputs)
+    return processor.decode(outputs[0], skip_special_tokens=True)
+
+def generate_image_description(image_path):
+    try:
+        processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+        model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
+        image = Image.open(image_path).convert("RGB")
+        inputs = processor(image, return_tensors="pt")
+        outputs = model.generate(**inputs)
+        caption = processor.decode(outputs[0], skip_special_tokens=True)
+        return caption
+    except Exception as e:
+        return f"Errore nella generazione della descrizione - Error in description generation: {str(e)}"
+
 def extract_text(path):
     ext = os.path.splitext(path)[1].lower()
     try:
+        text = ""
         if ext == '.pdf':
-            
             with open(path, 'rb') as f:
-                return ''.join([page.extract_text() for page in PdfReader(f).pages])
+                text = ''.join([page.extract_text() for page in PdfReader(f).pages])
+        elif ext == '.docx':
+            text = '\n'.join([p.text for p in docx.Document(path).paragraphs])
+        elif ext == '.xlsx':
+            wb = openpyxl.load_workbook(path)
+            text = ' '.join(str(cell.value) for sheet in wb for row in sheet.iter_rows() for cell in row)
         elif ext == '.txt':
             with open(path, 'r', encoding='utf-8') as f:
-                return f.read()
-        elif ext in ['.jpg', '.png', '.jpeg']:
-            
-            return pytesseract.image_to_string(Image.open(path), lang='ita')
-        elif ext in ['.mp3', '.wav']:
-            return whisper.load_model('base').transcribe(path, language='it')['text']
-        else:
-            with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-                return f.read()
+                text = f.read()
+        elif ext == '.html':
+            with open(path, 'r', encoding='utf-8') as f:
+                text = BeautifulSoup(f, 'html.parser').get_text()
+        elif ext in SUPPORTED_EXT['image']:
+            text = pytesseract.image_to_string(Image.open(path), lang=t("tesslang"))
+            text2 = generate_image_description(path)
+            text += "".join(text2)
+        elif ext in SUPPORTED_EXT['audio']:
+            text = whisper.load_model('base').transcribe(path, language=t("whisperlang"))['text']
+        elif ext in SUPPORTED_EXT['video']:
+            text = extract_text_from_video(path)
+            frames = extract_video_frames(path)
+            frame_descriptions = [f"Frame {idx}: {describe_frame(frame)}" for idx, frame in frames]
+            text += "\n".join(frame_descriptions)
+        else:  # Gestione formati non supportati
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    text = f.read()
+                if not text.strip():
+                    return []
+            except UnicodeDecodeError:
+                try:
+                    with open(path, 'r', encoding='latin-1') as f:
+                        text = f.read()
+                    if not text.strip():
+                        return []
+                except Exception as e:
+                    return []
+            except Exception as e:
+                return []
+        return text
     except Exception as e:
-        print(f"Errore estrazione testo: {str(e)}")
-        return ""
+        if language=="Italian":
+            st.error(f"Errore estrazione da {path}: {e}")
+        else:
+            st.error(f"Extraction error from {path}: {e}")
+        return []       
+    return text
 
 # funzione generate_embedding
 def generate_embedding(text, embedder):
@@ -244,67 +357,6 @@ def generate_embedding(text, embedder):
     with torch.no_grad():
         outputs = bert_model(**inputs)
     return outputs.last_hidden_state.mean(dim=1).numpy()[0]
-
-def process_documents(config):
-    index_path = os.path.join(WORKSPACES_DIR, "vector.index")
-    metadata_path = os.path.join(WORKSPACES_DIR, "metadata.pkl")
-    log_path = os.path.join(WORKSPACES_DIR, "processed_files.log")
-
-    stats = {"processed": 0, "errors": 0}
-    
-    try:
-        processed_files = set(open(log_path).read().splitlines()) if os.path.exists(log_path) else set()
-        current_files = set()
-        
-        for root, _, files in os.walk(DOCUMENTS_DIR):
-            for file in files:
-                current_files.add(os.path.join(root, file))
-        
-        new_files = current_files - processed_files
-        stats["total"] = len(new_files)
-
-        if not new_files:
-            return stats
-
-        index = faiss.read_index(index_path)
-        with open(metadata_path, 'rb') as f:
-            metadata = pickle.load(f)
-
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=config['chunk_size'],
-            top_k=config['top_k']
-        )
-
-        for path in new_files:
-            try:
-                text = extract_text(path)
-                if text:
-                    chunks = text_splitter.split_text(text)
-                    for chunk in chunks:
-                        embedding = generate_embedding(chunk, config['embedder'])
-                        embedding = np.array(embedding).astype('float32')
-                        index.add(np.array([embedding]))
-                        metadata.append({
-                            'path': path,
-                            'content': chunk,
-                            'embedding': embedding
-                        })
-                    stats["processed"] += 1
-            except Exception as e:
-                print(f"Errore processing {path}: {str(e)}")
-                stats["errors"] += 1
-
-        faiss.write_index(index, index_path)
-        with open(metadata_path, 'wb') as f:
-            pickle.dump(metadata, f)
-        with open(log_path, 'a') as f:
-            f.write('\n'.join(new_files) + '\n')
-
-    except Exception as e:
-        print(f"Errore generale processamento: {str(e)}")
-        stats["errors"] += 1
-    
-    return stats
 	
 def rag_search(query, config):
     index_path = os.path.join(WORKSPACES_DIR, "vector.index")
@@ -361,25 +413,41 @@ def query_ollama(prompt: str) -> str:
         return f"Errore nella generazione della risposta: {str(e)}"
 
 def synthesize_voice(text: str, speaker_wav: str, output_path: str = "output.wav") -> str:
-    """Genera audio dalla text-to-speech con controllo degli input"""
+    """Genera audio dalla text-to-speech con controllo degli input e supporto per testi lunghi."""
     try:
         # Verifica presenza file voce campione
         if not os.path.exists(speaker_wav):
             raise FileNotFoundError(f"File voce campione non trovato: {speaker_wav}")
-        
+
         # Verifica testo valido
         if not text or not isinstance(text, str):
             raise ValueError("Testo non valido per la sintesi vocale")
-        
-        # Genera audio
-        tts.tts_to_file(
-            text=text,
-            speaker_wav=speaker_wav,
-            file_path=output_path,
-            language="it"
-        )
-        return output_path
-    
+
+        # Suddividi il testo se supera il limite (213 caratteri)
+        max_length = 213
+        text_chunks = [text[i:i+max_length] for i in range(0, len(text), max_length)]
+
+        # Genera audio per ogni chunk
+        chunk_files = []
+        for i, chunk in enumerate(text_chunks):
+            chunk_output_path = f"{output_path[:-4]}_part{i}.wav"
+            tts.tts_to_file(
+                text=chunk,
+                speaker_wav=speaker_wav,
+                file_path=chunk_output_path,
+                language="it"
+            )
+            chunk_files.append(chunk_output_path)
+
+        # Unisci i file audio generati in uno unico
+        final_audio_path = merge_audio_files(chunk_files, output_path)
+
+        # Rimuovi i file temporanei
+        for chunk_file in chunk_files:
+            os.remove(chunk_file)
+
+        return final_audio_path
+
     except Exception as e:
         raise RuntimeError(f"Errore sintesi vocale: {str(e)}") from e
 
