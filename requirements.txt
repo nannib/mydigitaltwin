@@ -11,7 +11,7 @@ pypdf==5.4.0
 pytesseract==0.3.13
 Requests==2.32.3
 SpeechRecognition==3.14.1
-transformers==4.49.0
+transformers==4.46.1
 coqui-tts==0.25.3
 pydantic==2.10.6
 bs4==0.0.2
