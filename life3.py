@@ -593,7 +593,7 @@ def cleanup_and_exit():
 
 
 with gr.Blocks(css=css, title="AI Assistant") as app:
-    gr.HTML("<h1 style='text-align: center'>DigitalTwin con RAG Integrato</h1>")
+    gr.HTML("<h1 style='text-align: center'>MyDigitalTwin con RAG Integrato</h1>")
     gr.HTML(autoplay_js)
     
     with gr.Row():
