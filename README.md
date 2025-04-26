@@ -35,7 +35,7 @@ MyDigitalTwin, allows you to:
 4) Choose an embedder (by default there is bert-base-italian-uncased for Italian.
 5) Update the index.
 7) CHAT
-8) The program downloads the files to C:\Users\YOUR_USER_NAME\.cache\huggingface\hub: models--dbmdz--bert-base-italian-uncased, models--Salesforce--blip-image-captioning-base, whisper.
+8) The program downloads the files to C:\Users\YOUR_USER_NAME\.cache\huggingface\hub: models--dbmdz--bert-base-italian-uncased, models--Salesforce--blip-image-captioning-base, whisper, coqui-tts.
 
 ## How to run:
 1) create the mydigitaltwin folder
