@@ -1,5 +1,59 @@
 [![Watch the video](https://img.youtube.com/vi/AqPgEY65E0E/maxresdefault.jpg)](https://youtu.be/AqPgEY65E0E)
+<p align="center">by <a href="https://nannibassetti.com" target="_blank">Nanni Bassetti</a></p>   
 
+[ITALIAN](#ITALIANO)  -  [ENGLISH](#ENGLISH)  
+
+Based on **PYTHON 3.12.4**   
+###  ---------------- I tuoi dati rimangono sul tuo computer ---------------   
+<a name="ITALIANO"></a>  
+# mydigitaltwin  
+MyDigitalTwin: è un programma che può creare il tuo gemello digitale utilizzando un campione video e audio di te, con cui potrai interagire tramite microfono o chat di testo.
+Ti vedrai parlare con te, con la tua voce e il tuo viso in sincronizzazione labiale.
+
+Utilizza un modello di intelligenza artificiale e un sistema RAG per risposte personalizzate, così potrai indicizzare la tua vita, i tuoi pensieri, così da poter vivere per sempre in modalità vita digitale.
+Funziona in locale sul tuo computer, senza API, senza server esterni.
+
+### ---------------- I tuoi dati rimangono sul tuo computer ---------------
+
+Questo framework ti permette di chattare con i tuoi documenti in RAG, inclusi contenuti multimediali (audio, video, immagini e riconoscimento ottico dei caratteri).
+Il framework è un'interfaccia grafica per chattare con un modello GPT scaricato da OLLAMA; consigliamo LLAMA 3.2 (2 GB), che funziona perfettamente anche su computer di medie dimensioni.
+Inoltre, è necessario installare il software Tesseract; per il riconoscimento OCR, consigliamo di scegliere italiano e inglese durante l'installazione.
+
+---------------- I tuoi dati rimangono sul tuo computer ---------------
+
+È un framework italiano che ti permette di chattare con i tuoi documenti in RAG, inclusi i contenuti multimediali (audio, video, immagini e OCR).
+Il framework è un'interfaccia grafica per chattare con un modello GPT scaricato da OLLAMA; consigliamo LLAMA 3.2 (2 GB) che funziona perfettamente anche su computer di medie dimensioni.
+Inoltre, è necessario installare il software Tesseract; per il riconoscimento OCR, consigliamo di scegliere italiano e inglese durante l'installazione.
+MyDigitalTwin ti permette di:
+1) Chattare con il modello senza RAG.
+2) Chattare utilizzando la casella di testo o il microfono.
+3) Indicizzare una cartella di documenti di vario tipo per il RAG.
+4) Interrogare il sistema, che trascriverà l'audio e il video nei documenti, eseguirà l'OCR sulle immagini e descriverà anche 10 fotogrammi equamente distribuiti nel video.
+5) Devi usare un video di esempio (sample_face.mp4) e un audio di esempio della tua voce (sample_voice.wav).
+6) Il sistema necessita di una connessione Internet solo all'avvio per scaricare i modelli da HuggingFace, ecc. Dopodiché puoi anche scollegare il computer.
+7) Se nel sistema RAG sono presenti molti documenti su di te, puoi ottenere il tuo gemello digitale.
+
+## ISTRUZIONI PER SISTEMI WINDOWS
+
+1) Esegui il file install.bat (installa Tesseract, Ollama, il modello LLama3.2 e FFMpeg)
+2) Nel framework segui le istruzioni (ad esempio, scarica un modello).
+3) L'area di lavoro si trova nella cartella documenti.
+4) Scegli un embedder (di default è bert-base-italian-uncased per l'italiano).
+5) Aggiorna l'indice. 7) CHAT
+8) Il programma scarica i file in C:\Users\YOUR_USER_NAME\.cache\huggingface\hub: models--dbmdz--bert-base-italian-uncased, models--Salesforce--blip-image-captioning-base, whisper, coqui-tts.
+
+## Come eseguirlo:
+1) creare la cartella mydigitaltwin
+2) copiare tutto il contenuto di questo repository.
+3) creare un ambiente Python: python -m venv nbmultirag
+4) attivare l'ambiente (per Windows: mydigitaltwin\Scripts\activate)
+5) pip install -r requirements.txt
+6) python life3.py
+7) indicizzare una cartella di documenti di vario tipo per il RAG.
+8) interrogare il sistema, che trascriverà l'audio e il video nei documenti, eseguirà l'OCR sulle immagini e descriverà anche 10 fotogrammi equamente distribuiti nel video. 9) Il sistema necessita di una connessione Internet solo all'avvio per scaricare i modelli da HuggingFace, dopodiché è possibile anche scollegare il computer.
+
+  
+<a name="ENGLISH"></a>
 # mydigitaltwin  
 My digital twin - it is a program can make your digital twin using a video and audio sample of you, then you can interact by microphone or text chatting.  
 You will see yourself speaking with you, with your voice and your face in lip sync.  
