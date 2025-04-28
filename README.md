@@ -8,7 +8,8 @@ Based on **PYTHON 3.12.4**
 <a name="ITALIANO"></a>  
 # mydigitaltwin  
 MyDigitalTwin: è un programma che può creare il tuo gemello digitale utilizzando un campione video e audio di te, con cui potrai interagire tramite microfono o chat di testo.
-Ti vedrai parlare con te, con la tua voce e il tuo viso in sincronizzazione labiale.
+Ti vedrai parlare con te, con la tua voce e il tuo viso in sincronizzazione labiale.  
+È chiaramente un ## PROTOTIPO ## che potrebbe funzionare meglio ed essere ampliato, quindi tutti sono invitati a contribuire!  
 
 Utilizza un modello di intelligenza artificiale e un sistema RAG per risposte personalizzate, così potrai indicizzare la tua vita, i tuoi pensieri, così da poter vivere per sempre in modalità vita digitale.
 Funziona in locale sul tuo computer, senza API, senza server esterni.
@@ -36,7 +37,7 @@ MyDigitalTwin ti permette di:
 ## ISTRUZIONI PER SISTEMI WINDOWS
 
 1) Esegui il file install.bat (installa Tesseract, Ollama, il modello LLama3.2 e FFMpeg)
-2) Scarica il checkpoint wav2lip_gan.pth come indicato nel file nella cartella weights.
+2) ## Scarica il checkpoint wav2lip_gan.pth come indicato nel file nella cartella weights.
 3) Nel framework segui le istruzioni (ad esempio, scarica un modello).
 4) L'area di lavoro si trova nella cartella documents, dove andrai a mettere i tuoi documenti da indicizzare nel RAG.
 5) Scegli un embedder (di default è bert-base-italian-uncased per l'italiano).
@@ -59,6 +60,7 @@ MyDigitalTwin ti permette di:
 # mydigitaltwin  
 My digital twin - it is a program can make your digital twin using a video and audio sample of you, then you can interact by microphone or text chatting.  
 You will see yourself speaking with you, with your voice and your face in lip sync.  
+This is clearly a ## PROTOTYPE ## that could work better and be expanded, so everyone is welcome to contribute!  
 
 It uses an AI model and a RAG system for custom answers, you could index your life, your thoughts, so you can live forever in a digital life mode.  
 It runs local on your computer, no API, no external servers.  
@@ -87,7 +89,7 @@ MyDigitalTwin, allows you to:
 
 1) Run the install.bat file (it installs Tesseract, Ollama, LLama3.2 model and FFMpeg)
 2) In the framework follow the prompts (e.g. download a template).
-3) Download the checkpoint wav2lip_gan.pth following the link into the folder named "weights".
+3) ## Download the checkpoint wav2lip_gan.pth following the link into the folder named "weights".
 4) The workspace is in the "documents" folder, where you put your documents for the RAG indexing.
 5) Choose an embedder (by default there is bert-base-italian-uncased for Italian.
 6) Update the index.
