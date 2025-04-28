@@ -1,6 +1,9 @@
 [![Watch the video](https://img.youtube.com/vi/AqPgEY65E0E/maxresdefault.jpg)](https://youtu.be/AqPgEY65E0E)
 <p align="center">by <a href="https://nannibassetti.com" target="_blank">Nanni Bassetti</a></p>   
-
+VIDEO: <a href="https://youtu.be/AqPgEY65E0E" target="_blank"> https://youtu.be/AqPgEY65E0E </a>   
+  
+.
+  
 [ITALIAN](#ITALIANO)  -  [ENGLISH](#ENGLISH)  
 
 Based on **PYTHON 3.12.4**   
