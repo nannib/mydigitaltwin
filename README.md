@@ -25,9 +25,6 @@ Inoltre, è necessario installare il software Tesseract; per il riconoscimento O
 
 ---------------- I tuoi dati rimangono sul tuo computer ---------------
 
-È un framework italiano che ti permette di chattare con i tuoi documenti in RAG, inclusi i contenuti multimediali (audio, video, immagini e OCR).
-Il framework è un'interfaccia grafica per chattare con un modello GPT scaricato da OLLAMA; consigliamo LLAMA 3.2 (2 GB) che funziona perfettamente anche su computer di medie dimensioni.
-Inoltre, è necessario installare il software Tesseract; per il riconoscimento OCR, consigliamo di scegliere italiano e inglese durante l'installazione.
 MyDigitalTwin ti permette di:
 1) Chattare con il modello senza RAG.
 2) Chattare utilizzando la casella di testo o il microfono.
@@ -40,7 +37,7 @@ MyDigitalTwin ti permette di:
 ## ISTRUZIONI PER SISTEMI WINDOWS
 
 1) Esegui il file install.bat (installa Tesseract, Ollama, il modello LLama3.2 e FFMpeg)
-2) ## Scarica il checkpoint wav2lip_gan.pth come indicato nel file nella cartella weights.
+2) ## Scarica il checkpoint wav2lip_gan.pth come indicato nel file TXT nella cartella weights.
 3) Nel framework segui le istruzioni (ad esempio, scarica un modello).
 4) L'area di lavoro si trova nella cartella documents, dove andrai a mettere i tuoi documenti da indicizzare nel RAG.
 5) Scegli un embedder (di default è bert-base-italian-uncased per l'italiano).
@@ -56,7 +53,8 @@ MyDigitalTwin ti permette di:
 5) pip install -r requirements.txt
 6) python life3.py
 7) indicizzare una cartella di documenti di vario tipo per il RAG.
-8) interrogare il sistema, che trascriverà l'audio e il video nei documenti, eseguirà l'OCR sulle immagini e descriverà anche 10 fotogrammi equamente distribuiti nel video. 9) Il sistema necessita di una connessione Internet solo all'avvio per scaricare i modelli da HuggingFace, dopodiché è possibile anche scollegare il computer.
+8) interrogare il sistema, che trascriverà l'audio e il video nei documenti, eseguirà l'OCR sulle immagini e descriverà anche 10 fotogrammi equamente distribuiti nel video.
+9) Il sistema necessita di una connessione Internet solo all'avvio per scaricare i modelli da HuggingFace, dopodiché è possibile anche scollegare il computer.
 
   
 <a name="ENGLISH"></a>
@@ -76,9 +74,6 @@ In addition, you need to install the Tesseract software, for OCR recognition, we
 
 ---------------- Your data remains on your computer ---------------  
 
-It is an Italian, which allows you to chat with your documents in RAG, including multimedia (audio, video, images and OCR).
-The framework is a GUI to chat with a GPT model downloaded from OLLAMA, we recommend LLAMA 3.2 (2Gb) which performs perfectly even on medium-sized machines.
-In addition, you need to install the Tesseract software, for OCR recognition, we recommend choosing Italian and English during installation.
 MyDigitalTwin, allows you to:
 1) Chat with the model without RAG.
 2) Chat using textbox or microphone.
