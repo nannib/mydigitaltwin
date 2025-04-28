@@ -36,10 +36,12 @@ MyDigitalTwin ti permette di:
 ## ISTRUZIONI PER SISTEMI WINDOWS
 
 1) Esegui il file install.bat (installa Tesseract, Ollama, il modello LLama3.2 e FFMpeg)
-2) Nel framework segui le istruzioni (ad esempio, scarica un modello).
-3) L'area di lavoro si trova nella cartella documenti.
-4) Scegli un embedder (di default è bert-base-italian-uncased per l'italiano).
-5) Aggiorna l'indice. 7) CHAT
+2) Scarica il checkpoint wav2lip_gan.pth come indicato nel file nella cartella weights.
+3) Nel framework segui le istruzioni (ad esempio, scarica un modello).
+4) L'area di lavoro si trova nella cartella documents, dove andrai a mettere i tuoi documenti da indicizzare nel RAG.
+5) Scegli un embedder (di default è bert-base-italian-uncased per l'italiano).
+6) Aggiorna l'indice.
+7) CHAT
 8) Il programma scarica i file in C:\Users\YOUR_USER_NAME\.cache\huggingface\hub: models--dbmdz--bert-base-italian-uncased, models--Salesforce--blip-image-captioning-base, whisper, coqui-tts.
 
 ## Come eseguirlo:
@@ -85,9 +87,10 @@ MyDigitalTwin, allows you to:
 
 1) Run the install.bat file (it installs Tesseract, Ollama, LLama3.2 model and FFMpeg)
 2) In the framework follow the prompts (e.g. download a template).
-3) The workspace is in the documents folder.
-4) Choose an embedder (by default there is bert-base-italian-uncased for Italian.
-5) Update the index.
+3) Download the checkpoint wav2lip_gan.pth following the link into the folder named "weights".
+4) The workspace is in the "documents" folder, where you put your documents for the RAG indexing.
+5) Choose an embedder (by default there is bert-base-italian-uncased for Italian.
+6) Update the index.
 7) CHAT
 8) The program downloads the files to C:\Users\YOUR_USER_NAME\.cache\huggingface\hub: models--dbmdz--bert-base-italian-uncased, models--Salesforce--blip-image-captioning-base, whisper, coqui-tts.
 
