@@ -1,3 +1,4 @@
 Fonte: https://pypi.org/project/lipsync/
 Download wav2lip_gan.pth from: https://drive.usercontent.google.com/download?id=13Ktexq-nZOsAxqrTdMh3Q0ntPB3yiBtv&authuser=1
 then put it in this directory.
+WARNING: MyDigitalTwin works only with this wav2lip_gan.pth file!
