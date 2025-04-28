@@ -104,6 +104,4 @@ MyDigitalTwin, allows you to:
  
 # ** How to run **  
 python life3.py  
-
-This is the notebook for trying it:  
-https://www.kaggle.com/code/nannib/notebook193e2ba556  
+ 
