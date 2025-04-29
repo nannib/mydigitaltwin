@@ -101,7 +101,7 @@ def initialize_workspace():
             "embedder": "dbmdz/bert-base-italian-uncased",
             "temperature": 0.2,
             "chunk_size": 800,
-            "top_k": 6,
+            "top_k": 60,
 			"chunk_overlap": 128,
             "system_prompt": "Sei un assistente esperto. Rispondi basandoti sul contesto fornito."
         }
@@ -257,11 +257,8 @@ def extract_text_from_video(path):
         os.remove(temp_audio)
         return text
     except Exception as e:
-        if language=="Italian":
-            st.error(f"Errore elaborazione video: {e}")
-        else:
-            st.error(f"Video processing error: {e}")
-        return ""
+        print(f"Errore elaborazione video: {e}")
+
 
 def extract_video_frames(path, num_frames=10):
     cap = cv2.VideoCapture(path)
@@ -316,11 +313,11 @@ def extract_text(path):
             with open(path, 'r', encoding='utf-8') as f:
                 text = BeautifulSoup(f, 'html.parser').get_text()
         elif ext in SUPPORTED_EXT['image']:
-            text = pytesseract.image_to_string(Image.open(path), lang=t("tesslang"))
+            text = pytesseract.image_to_string(Image.open(path), lang="ita")
             text2 = generate_image_description(path)
             text += "".join(text2)
         elif ext in SUPPORTED_EXT['audio']:
-            text = whisper.load_model('base').transcribe(path, language=t("whisperlang"))['text']
+            text = whisper.load_model('base').transcribe(path, language="it")['text']
         elif ext in SUPPORTED_EXT['video']:
             text = extract_text_from_video(path)
             frames = extract_video_frames(path)
@@ -344,10 +341,7 @@ def extract_text(path):
                 return []
         return text
     except Exception as e:
-        if language=="Italian":
-            st.error(f"Errore estrazione da {path}: {e}")
-        else:
-            st.error(f"Extraction error from {path}: {e}")
+        print(f"Errore estrazione da {path}: {e}")
         return []       
     return text
 
@@ -593,7 +587,7 @@ def cleanup_and_exit():
 
 
 with gr.Blocks(css=css, title="AI Assistant") as app:
-    gr.HTML("<h1 style='text-align: center'>MyDigitalTwin con RAG Integrato</h1>")
+    gr.HTML("<h1 style='text-align: center'>DigitalTwin con RAG Integrato</h1>")
     gr.HTML(autoplay_js)
     
     with gr.Row():
