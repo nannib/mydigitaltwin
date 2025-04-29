@@ -1,0 +1,1 @@
+2025-04-29 MyDigitalTwin 1.1 - aggiunto install.sh per Gnu/Linux
