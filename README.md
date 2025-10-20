@@ -50,7 +50,7 @@ MyDigitalTwin ti permette di:
 ## Come eseguirlo:
 1) creare la cartella mydigitaltwin
 2) copiare tutto il contenuto di questo repository.
-3) creare un ambiente Python: python -m venv nbmultirag
+3) creare un ambiente Python: python -m venv mydigitaltwin
 4) attivare l'ambiente (per Windows: mydigitaltwin\Scripts\activate)
 5) pip install -r requirements.txt
 6) python life3.py
@@ -99,7 +99,7 @@ MyDigitalTwin, allows you to:
 ## How to run:
 1) create the mydigitaltwin folder
 2) copy all the contents of this repository.
-3) create a Python environment: python -m venv nbmultirag
+3) create a Python environment: python -m venv mydigitaltwin
 4) Activate the environment (for Windows: mydigitaltwin\Scripts\activate)
 5) pip install -r requirements.txt
 6) python life3.py 
